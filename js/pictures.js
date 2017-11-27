@@ -18,25 +18,28 @@ var commentsList = [
 ];
 
 var createPhotos = function () {
-  
   var photoArr = [];
 
   for (var i = 0; i <= 25; i++) {
 	var photo = {};
 	photo.url = 'photos/' + (i + 1) + '.jpg';
 	photo.likes = getRandom(15, 200);
-	photo.comments = []
+
 	var numberOfComments = getRandom(1, 2);
+  var comment = '';
+  var commentSum = '';
 	for (var j = 0; j < numberOfComments; j++) {
-		photo.comments[j] = getRandomArrayItem(commentsList);
-	}
+    comment = getRandomArrayItem(commentsList) + ' ';
+    commentSum += comment;
+  }
+
+	photo.comments = commentSum;
 	photoArr[i] = photo;
   }
   return photoArr;
-}
+};
 
-var pictures = createPhotos();
-
+var pictures = createPhotos(); // Создание массива с фотографиями
 
 var photoSelectors = {
   image: '.picture img',
@@ -44,12 +47,12 @@ var photoSelectors = {
   comments: '.picture-comments'
 };
 
-var fillPhotoData = function (selector, photoSelectors, photoArr) {
-  selector.querySelector(photoSelectors.image).src = photoArr.url;
-  selector.querySelector(photoSelectors.likes).textContent = photoArr.likes;
-  selector.querySelector(photoSelectors.comments).textContent = photoArr.comments;
+var fillPhotoData = function (element, photoSelectors, photoArr) {
+  element.querySelector(photoSelectors.image).src = photoArr.url;
+  element.querySelector(photoSelectors.likes).textContent = photoArr.likes;
+  element.querySelector(photoSelectors.comments).textContent = photoArr.comments;
 
-  return selector;
+  return element;
 };
 
 var renderPhoto = function (photosArr, template) {
@@ -64,7 +67,7 @@ var renderPhoto = function (photosArr, template) {
 var picturesList = document.querySelector('.pictures');
 var picturesTemplate = document.querySelector('#picture-template');
 
-picturesList.appendChild(renderPhoto(pictures, picturesTemplate));
+picturesList.appendChild(renderPhoto(pictures, picturesTemplate)); // Добавление клонированных из шаблона фотографий в контейнер
 
 var galleryOverlay = document.querySelector('.gallery-overlay');
 
@@ -74,6 +77,6 @@ var gallerySelectors = {
   comments: '.comments-count'
 };
 
-fillPhotoData(galleryOverlay, gallerySelectors, pictures[0]);
+fillPhotoData(galleryOverlay, gallerySelectors, pictures[0]); // Добавление данных в форму галереи
 
 galleryOverlay.classList.remove('hidden');
