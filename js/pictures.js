@@ -21,20 +21,19 @@ var createPhotos = function () {
   var photoArr = [];
 
   for (var i = 0; i <= 25; i++) {
-	var photo = {};
-	photo.url = 'photos/' + (i + 1) + '.jpg';
-	photo.likes = getRandom(15, 200);
+    var photo = {};
+    photo.url = 'photos/' + (i + 1) + '.jpg';
+    photo.likes = getRandom(15, 200);
 
-	var numberOfComments = getRandom(1, 2);
-  var comment = '';
-  var commentSum = '';
-	for (var j = 0; j < numberOfComments; j++) {
-    comment = getRandomArrayItem(commentsList) + ' ';
-    commentSum += comment;
-  }
-
-	photo.comments = commentSum;
-	photoArr[i] = photo;
+    var numberOfComments = getRandom(1, 2);
+    var comment = '';
+    var commentSum = '';
+    for (var j = 0; j < numberOfComments; j++) {
+      comment = getRandomArrayItem(commentsList) + ' ';
+      commentSum += comment;
+    }
+    photo.comments = commentSum;
+    photoArr[i] = photo;
   }
   return photoArr;
 };
@@ -47,19 +46,19 @@ var photoSelectors = {
   comments: '.picture-comments'
 };
 
-var fillPhotoData = function (element, photoSelectors, photoArr) {
-  element.querySelector(photoSelectors.image).src = photoArr.url;
-  element.querySelector(photoSelectors.likes).textContent = photoArr.likes;
-  element.querySelector(photoSelectors.comments).textContent = photoArr.comments;
+var fillPhotoData = function (element, selector, photoArr) {
+  element.querySelector(selector.image).src = photoArr.url;
+  element.querySelector(selector.likes).textContent = photoArr.likes;
+  element.querySelector(selector.comments).textContent = photoArr.comments;
 
   return element;
 };
 
-var renderPhoto = function (photosArr, template) {
+var renderPhoto = function (photoArr, template) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < photosArr.length; i++) {
+  for (var i = 0; i < photoArr.length; i++) {
     var picturelSelector = template.content.cloneNode(true);
-    fragment.appendChild(fillPhotoData(picturelSelector, photoSelectors, photosArr[i]));
+    fragment.appendChild(fillPhotoData(picturelSelector, photoSelectors, photoArr[i]));
   }
   return fragment;
 };
