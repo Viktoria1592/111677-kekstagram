@@ -17,47 +17,63 @@ var commentsList = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-var pictures = [];
+var createPhotos = function () {
+  
+  var photoArr = [];
 
-for (var i = 0; i < 25; i++) {
-  pictures[i] = {
-    url: 'photos/' + (1 + i) + '.jpg',
-    likes: getRandom(15, 200),
-    comments: getRandomArrayItem(commentsList)
+  for (var i = 0; i <= 25; i++) {
+	var photo = {};
+	photo.url = 'photos/' + (i + 1) + '.jpg';
+	photo.likes = getRandom(15, 200);
+	photo.comments = []
+	var numberOfComments = getRandom(1, 2);
+	for (var j = 0; j < numberOfComments; j++) {
+		photo.comments[j] = getRandomArrayItem(commentsList);
+	}
+	photoArr[i] = photo;
   }
+  return photoArr;
 }
 
-var picturesList = document.querySelector('.pictures');
-var picturesTemplate = document.querySelector('#picture-template').content;
+var pictures = createPhotos();
 
-var createPictureNode = function (arr, template, img, likes, comment) {
-  var pictureElement = template.cloneNode(true);
 
-  pictureElement.querySelector(img).src = arr.url;
-  pictureElement.querySelector(likes).textContent = arr.likes;
-  pictureElement.querySelector(comment).textContent = arr.comments;
-
-  return pictureElement;
+var photoSelectors = {
+  image: '.picture img',
+  likes: '.picture-likes',
+  comments: '.picture-comments'
 };
 
-var fillPictureData = function (arr, element, img, likes, comment) {
-  element.querySelector(img).src = arr.url;
-  element.querySelector(likes).textContent = arr.likes;
-  element.querySelector(comment).textContent = arr.comments;
-  return element;
+var fillPhotoData = function (selector, photoSelectors, photoArr) {
+  selector.querySelector(photoSelectors.image).src = photoArr.url;
+  selector.querySelector(photoSelectors.likes).textContent = photoArr.likes;
+  selector.querySelector(photoSelectors.comments).textContent = photoArr.comments;
+
+  return selector;
 };
 
-var createPictures = function (arr, template, element, img, likes, comment) {
+var renderPhoto = function (photosArr, template) {
   var fragment = document.createDocumentFragment();
-  for (var j = 0; j < arr.length; j++) {
-    fragment.appendChild(createPictureNode(pictures[j], template, img, likes, comment));
+  for (var i = 0; i < photosArr.length; i++) {
+    var picturelSelector = template.content.cloneNode(true);
+    fragment.appendChild(fillPhotoData(picturelSelector, photoSelectors, photosArr[i]));
   }
-  return element.appendChild(fragment);
+  return fragment;
 };
 
-createPictures(pictures, picturesTemplate, picturesList, 'img' , '.picture-likes','.picture-comments');
+var picturesList = document.querySelector('.pictures');
+var picturesTemplate = document.querySelector('#picture-template');
+
+picturesList.appendChild(renderPhoto(pictures, picturesTemplate));
 
 var galleryOverlay = document.querySelector('.gallery-overlay');
-galleryOverlay.classList.remove('hidden');
 
-fillPictureData(pictures[0], galleryOverlay, '.gallery-overlay-image' , '.likes-count', '.comments-count');
+var gallerySelectors = {
+  image: '.gallery-overlay-image',
+  likes: '.likes-count',
+  comments: '.comments-count'
+};
+
+fillPhotoData(galleryOverlay, gallerySelectors, pictures[0]);
+
+galleryOverlay.classList.remove('hidden');
