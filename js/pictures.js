@@ -1,5 +1,8 @@
 'use strict';
 
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 var getRandom = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
 };
@@ -68,14 +71,29 @@ var picturesTemplate = document.querySelector('#picture-template');
 
 picturesList.appendChild(renderPhoto(pictures, picturesTemplate)); // Добавление клонированных из шаблона фотографий в контейнер
 
-var galleryOverlay = document.querySelector('.gallery-overlay');
-
 var gallerySelectors = {
   image: '.gallery-overlay-image',
   likes: '.likes-count',
   comments: '.comments-count'
 };
 
-fillPhotoData(galleryOverlay, gallerySelectors, pictures[0]); // Добавление данных в форму галереи
+var galleryOverlay = document.querySelector('.gallery-overlay');
+var userPictures = document.querySelectorAll('.picture');
 
-galleryOverlay.classList.remove('hidden');
+var fillOverlayData = function (element, gallerySelectors, photoSelectors) {
+  galleryOverlay.querySelector(gallerySelectors.image).src = element.querySelector(photoSelectors.image).src;
+  galleryOverlay.querySelector(gallerySelectors.likes).textContent = element.querySelector(photoSelectors.likes).textContent;
+  galleryOverlay.querySelector(gallerySelectors.comments).textContent = element.querySelector(photoSelectors.comments).textContent;
+};
+
+var openGalleryOverlay = function (element) {
+  fillOverlayData(element, gallerySelectors, photoSelectors);
+  galleryOverlay.classList.remove('hidden');
+};
+
+userPictures.forEach(function (element) {
+  element.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    openGalleryOverlay(element);
+  });
+});
