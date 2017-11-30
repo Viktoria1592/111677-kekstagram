@@ -1,7 +1,8 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Денис Тутов](https://up.htmlacademy.ru/javascript/11/user/111677).
-* Наставник: `Андрей Фатюк`.
+
+* Наставник: Андрей Фатюк.
 
 ---
 
