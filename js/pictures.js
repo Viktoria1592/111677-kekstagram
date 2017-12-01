@@ -77,23 +77,45 @@ var gallerySelectors = {
   comments: '.comments-count'
 };
 
-var galleryOverlay = document.querySelector('.gallery-overlay');
 var userPictures = document.querySelectorAll('.picture');
+var galleryOverlay = document.querySelector('.gallery-overlay');
+var galleryCloseBtn = document.querySelector('.gallery-overlay-close');
 
-var fillOverlayData = function (element, gallerySelectors, photoSelectors) {
-  galleryOverlay.querySelector(gallerySelectors.image).src = element.querySelector(photoSelectors.image).src;
-  galleryOverlay.querySelector(gallerySelectors.likes).textContent = element.querySelector(photoSelectors.likes).textContent;
-  galleryOverlay.querySelector(gallerySelectors.comments).textContent = element.querySelector(photoSelectors.comments).textContent;
+var copyDataFromTarget = function (element, target, elementSelectors, targetSelectors) {
+  element.querySelector(elementSelectors.image).src = target.querySelector(targetSelectors.image).src;
+  element.querySelector(elementSelectors.likes).textContent = target.querySelector(targetSelectors.likes).textContent;
+  element.querySelector(elementSelectors.comments).textContent = target.querySelector(targetSelectors.comments).textContent;
 };
 
-var openGalleryOverlay = function (element) {
-  fillOverlayData(element, gallerySelectors, photoSelectors);
+var openGalleryOverlay = function (targetPicture) {
+  copyDataFromTarget(galleryOverlay, targetPicture, gallerySelectors, photoSelectors); // Копируем данные переданной фотографии
   galleryOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onGalleryOverlayEscPress);
 };
 
-userPictures.forEach(function (element) {
-  element.addEventListener('click', function (evt) {
+var closeGalleryOverlay = function () {
+  galleryOverlay.classList.add('hidden');
+}
+
+galleryCloseBtn.addEventListener('click', function () {
+  closeGalleryOverlay();
+});
+
+galleryCloseBtn.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+    closeGalleryOverlay();
+  }
+});
+
+var onGalleryOverlayEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeGalleryOverlay();
+  }
+};
+
+userPictures.forEach(function (picture) {
+  picture.addEventListener('click', function (evt) {
     evt.preventDefault();
-    openGalleryOverlay(element);
+    openGalleryOverlay(picture);
   });
 });
