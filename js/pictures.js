@@ -95,14 +95,14 @@ var openGalleryOverlay = function (targetPicture) {
 
 var closeGalleryOverlay = function () {
   galleryOverlay.classList.add('hidden');
-}
+};
 
 galleryCloseBtn.addEventListener('click', function () {
   closeGalleryOverlay();
 });
 
 galleryCloseBtn.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
+  if (evt.keyCode === ENTER_KEYCODE) {
     closeGalleryOverlay();
   }
 });
