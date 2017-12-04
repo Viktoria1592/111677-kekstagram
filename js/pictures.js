@@ -3,6 +3,10 @@
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
+var STEP_RESIZE = 25;
+var MAX_SIZE = 100;
+var MIN_SIZE = 25;
+
 var getRandom = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
 };
@@ -118,4 +122,88 @@ userPictures.forEach(function (picture) {
     evt.preventDefault();
     openGalleryOverlay(picture);
   });
+});
+
+// modele4-task2
+
+var uploadImageForm = document.querySelector('#upload-select-image');
+var uploadOverlayForm = document.querySelector('.upload-overlay');
+var uploadOverlayCloseBtn = document.querySelector('.upload-form-cancel');
+var uploadFormDescr = document.querySelector('.upload-form-description');
+var resizeValueField = document.querySelector('.upload-resize-controls-value');
+var resizeDecBnt = document.querySelector('.upload-resize-controls-button-dec');
+var resizeIncBnt = document.querySelector('.upload-resize-controls-button-inc');
+var effectImagePreview = document.querySelector('.effect-image-preview');
+
+var closeOverlayForm = function () {
+  uploadOverlayForm.classList.add('hidden');
+};
+
+uploadImageForm.addEventListener('change', function () {
+  uploadOverlayForm.classList.remove('hidden');
+
+  document.addEventListener('keydown', onUploadFormEscPress);
+  uploadOverlayCloseBtn.addEventListener('click', function () {
+    closeOverlayForm();
+  });
+  uploadFormDescr.addEventListener('focus', function (evt) {
+    evt.preventDefault();
+  });
+});
+
+var onUploadFormEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeOverlayForm();
+  }
+};
+
+var getResizeValue = function () {
+  var resezeValue = resizeValueField.value;
+  if (resezeValue.length < 4){
+    return +resezeValue.slice(0,2);
+  } else {
+    return +resezeValue.slice(0,3);
+  }
+};
+
+var getResizeMathValue = function (sign) {
+  if (sign === 'inc') {
+    return getResizeValue() + STEP_RESIZE;
+  } else {
+    return getResizeValue() - STEP_RESIZE;
+  }
+};
+
+var getScaleImage = function (value) {
+  return effectImagePreview.style = 'transform: scale('+ value / 100 + ')';
+};
+
+// var resizeImage = function (sign) {
+//   var resizeValue = getResizeValue();
+//   var mathResizeValue = getResizeMathValue(sign);
+//   if ((resizeValue !== MAX_SIZE && mathResizeValue > 0) || (resizeValue !== MIN_SIZE  && mathResizeValue < 0)){
+//     getScaleImage(mathResizeValue);
+//     return resizeValueField.value = mathResizeValue + '%';
+//   }
+// };
+
+resizeDecBnt.addEventListener('click', function () {
+  //resizeImage ('dec');
+
+  var resizeValue = getResizeValue();
+  var mathResizeValue = getResizeMathValue('dec');
+  if (resizeValue > MIN_SIZE && resizeValue !== mathResizeValue){
+    getScaleImage(mathResizeValue);
+    return resizeValueField.value = mathResizeValue + '%';
+  }
+});
+
+resizeIncBnt.addEventListener('click', function () {
+  //resizeImage ('inc');
+  var resizeValue = getResizeValue();
+  var mathResizeValue = getResizeMathValue('inc');
+  if (resizeValue < MAX_SIZE && resizeValue !== mathResizeValue){
+    getScaleImage(mathResizeValue);
+    return resizeValueField.value = mathResizeValue + '%';
+  }
 });
