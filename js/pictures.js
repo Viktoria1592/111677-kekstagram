@@ -1,5 +1,8 @@
 'use strict';
 
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 var getRandom = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
 };
@@ -68,14 +71,51 @@ var picturesTemplate = document.querySelector('#picture-template');
 
 picturesList.appendChild(renderPhoto(pictures, picturesTemplate)); // Добавление клонированных из шаблона фотографий в контейнер
 
-var galleryOverlay = document.querySelector('.gallery-overlay');
-
 var gallerySelectors = {
   image: '.gallery-overlay-image',
   likes: '.likes-count',
   comments: '.comments-count'
 };
 
-fillPhotoData(galleryOverlay, gallerySelectors, pictures[0]); // Добавление данных в форму галереи
+var userPictures = document.querySelectorAll('.picture');
+var galleryOverlay = document.querySelector('.gallery-overlay');
+var galleryCloseBtn = document.querySelector('.gallery-overlay-close');
 
-galleryOverlay.classList.remove('hidden');
+var copyDataFromTarget = function (element, target, elementSelectors, targetSelectors) {
+  element.querySelector(elementSelectors.image).src = target.querySelector(targetSelectors.image).src;
+  element.querySelector(elementSelectors.likes).textContent = target.querySelector(targetSelectors.likes).textContent;
+  element.querySelector(elementSelectors.comments).textContent = target.querySelector(targetSelectors.comments).textContent;
+};
+
+var openGalleryOverlay = function (targetPicture) {
+  copyDataFromTarget(galleryOverlay, targetPicture, gallerySelectors, photoSelectors); // Копируем данные переданной фотографии
+  galleryOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onGalleryOverlayEscPress);
+};
+
+var closeGalleryOverlay = function () {
+  galleryOverlay.classList.add('hidden');
+};
+
+galleryCloseBtn.addEventListener('click', function () {
+  closeGalleryOverlay();
+});
+
+galleryCloseBtn.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closeGalleryOverlay();
+  }
+});
+
+var onGalleryOverlayEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeGalleryOverlay();
+  }
+};
+
+userPictures.forEach(function (picture) {
+  picture.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    openGalleryOverlay(picture);
+  });
+});
