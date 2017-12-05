@@ -158,12 +158,7 @@ var onUploadFormEscPress = function (evt) {
 };
 
 var getResizeValue = function () {
-  var resezeValue = resizeValueField.value;
-  if (resezeValue.length < 4){
-    return +resezeValue.slice(0,2);
-  } else {
-    return +resezeValue.slice(0,3);
-  }
+  return parseInt(resizeValueField.value.replace('%', ''));
 };
 
 var getResizeMathValue = function (sign) {
@@ -178,18 +173,7 @@ var getScaleImage = function (value) {
   return effectImagePreview.style = 'transform: scale('+ value / 100 + ')';
 };
 
-// var resizeImage = function (sign) {
-//   var resizeValue = getResizeValue();
-//   var mathResizeValue = getResizeMathValue(sign);
-//   if ((resizeValue !== MAX_SIZE && mathResizeValue > 0) || (resizeValue !== MIN_SIZE  && mathResizeValue < 0)){
-//     getScaleImage(mathResizeValue);
-//     return resizeValueField.value = mathResizeValue + '%';
-//   }
-// };
-
 resizeDecBnt.addEventListener('click', function () {
-  //resizeImage ('dec');
-
   var resizeValue = getResizeValue();
   var mathResizeValue = getResizeMathValue('dec');
   if (resizeValue > MIN_SIZE && resizeValue !== mathResizeValue){
@@ -199,7 +183,6 @@ resizeDecBnt.addEventListener('click', function () {
 });
 
 resizeIncBnt.addEventListener('click', function () {
-  //resizeImage ('inc');
   var resizeValue = getResizeValue();
   var mathResizeValue = getResizeMathValue('inc');
   if (resizeValue < MAX_SIZE && resizeValue !== mathResizeValue){
