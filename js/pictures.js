@@ -3,9 +3,10 @@
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
-var STEP_RESIZE = 25;
-var MAX_SIZE = 100;
-var MIN_SIZE = 25;
+var MAX_SIZE_PICTURE = 100;
+var MIN_SIZE_PICTURE = 25;
+var NUM_OF_HASHTAGS = 5;
+var LENGTH_OF_HASHTAGS = 20;
 
 var getRandom = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
@@ -134,6 +135,9 @@ var resizeValueField = document.querySelector('.upload-resize-controls-value');
 var resizeDecBnt = document.querySelector('.upload-resize-controls-button-dec');
 var resizeIncBnt = document.querySelector('.upload-resize-controls-button-inc');
 var effectImagePreview = document.querySelector('.effect-image-preview');
+var uploadEffectsControls = document.querySelector('.upload-effect-controls');
+var imagePreview = document.querySelector('.effect-image-preview');
+var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
 
 var closeOverlayForm = function () {
   uploadOverlayForm.classList.add('hidden');
@@ -142,51 +146,91 @@ var closeOverlayForm = function () {
 uploadImageForm.addEventListener('change', function () {
   uploadOverlayForm.classList.remove('hidden');
 
-  document.addEventListener('keydown', onUploadFormEscPress);
   uploadOverlayCloseBtn.addEventListener('click', function () {
     closeOverlayForm();
   });
-  uploadFormDescr.addEventListener('focus', function (evt) {
-    evt.preventDefault();
-  });
+  document.addEventListener('keydown', onUploadFormEscPress);
+  //uploadFormDescr.addEventListener('focus', event.preventDefault()); 
 });
-
+  
 var onUploadFormEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closeOverlayForm();
   }
 };
 
-var getResizeValue = function () {
-  return parseInt(resizeValueField.value.replace('%', ''));
-};
-
-var getResizeMathValue = function (sign) {
-  if (sign === 'inc') {
-    return getResizeValue() + STEP_RESIZE;
+var getResizeImage = function(step) {
+  var currentResizeValue = parseInt(resizeValueField.value.replace('%', ''));
+  if ((currentResizeValue === MAX_SIZE_PICTURE && step > 0) || (currentResizeValue === MIN_SIZE_PICTURE && step < 0)){
+	return false;
   } else {
-    return getResizeValue() - STEP_RESIZE;
+	currentResizeValue += step;
+	resizeValueField.value = currentResizeValue + '%';
+	effectImagePreview.style = 'transform: scale('+ currentResizeValue / 100 + ')';
   }
-};
-
-var getScaleImage = function (value) {
-  return effectImagePreview.style = 'transform: scale('+ value / 100 + ')';
 };
 
 resizeDecBnt.addEventListener('click', function () {
-  var resizeValue = getResizeValue();
-  var mathResizeValue = getResizeMathValue('dec');
-  if (resizeValue > MIN_SIZE && resizeValue !== mathResizeValue){
-    getScaleImage(mathResizeValue);
-    return resizeValueField.value = mathResizeValue + '%';
-  }
+	getResizeImage(-25);
 });
 
 resizeIncBnt.addEventListener('click', function () {
-  var resizeValue = getResizeValue();
-  var mathResizeValue = getResizeMathValue('inc');
-  if (resizeValue < MAX_SIZE && resizeValue !== mathResizeValue){
-    getScaleImage(mathResizeValue);
-    return resizeValueField.value = mathResizeValue + '%';
-  }
+	getResizeImage(25);
 });
+
+var onEffectControlsClick = function (evt) {
+	var target = evt.target;
+	if (target.type === 'radio') {
+		imagePreview.classList = '';
+		imagePreview.classList.add('effect-' + target.value);
+	}
+};
+
+uploadEffectsControls.addEventListener('click', onEffectControlsClick);
+
+
+var checkHashTagsValidity = function () {
+  var uploadHashTags = uploadHashTagsForm.value.toLowerCase().split(', ');
+
+  if (uploadHashTags.length > NUM_OF_HASHTAGS) {
+    return false;
+  }
+
+  for (var i = 0; i < uploadHashTags.length; i++) {
+    if ((uploadHashTags[i][0] !== '#' && uploadHashTags[i].length > 0) || uploadHashTags[i].length > LENGTH_OF_HASHTAGS) {
+      return false;
+    }
+    for (var j = i + 1; j < uploadHashTags.length; j++) {
+      if (uploadHashTags[i] === uploadHashTags[j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+var checkHashTags = function () {
+  if (checkHashTagsValidity()) {
+    uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)';
+    return true;
+  } else {
+    uploadHashTagsForm.style.borderColor = 'red';
+    return false;
+  }
+};
+
+var overlayFormToDefaults = function () {
+  uploadOverlayForm.classList.add('hidden');
+  effectImagePreview.style.transform = 'scale(1.0)';
+};
+  
+var onUploadPhotoFormClick = function () {
+  if (checkHashTags() === true) {
+    overlayFormToDefaults();
+  } else {
+    event.preventDefault();
+  }
+};
+
+uploadHashTagsForm.addEventListener('input', checkHashTags);
+uploadImageForm.addEventListener('submit', onUploadPhotoFormClick);
