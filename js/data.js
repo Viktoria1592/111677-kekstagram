@@ -19,7 +19,7 @@
     return arr[getRandom(0, arr.length - 1)];
   };
 
- var createPhotos = function () {
+  var createPhotos = function () {
     var photoArr = [];
 
     for (var i = 0; i <= 25; i++) {
