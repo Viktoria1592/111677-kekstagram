@@ -4,7 +4,6 @@
 
   var picturesList = document.querySelector('.pictures');
   var picturesTemplate = document.querySelector('#picture-template');
-  //var userPictures = document.querySelector('.picture');
 
   var pictures = window.createPhotos();
 
