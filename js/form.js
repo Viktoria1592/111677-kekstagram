@@ -20,6 +20,7 @@
   var resizeIncBnt = document.querySelector('.upload-resize-controls-button-inc');
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var uploadEffectsControls = document.querySelector('.upload-effect-controls');
+
   var imagePreview = document.querySelector('.effect-image-preview');
   var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
   var isFormDescrBusy = false;
@@ -80,11 +81,18 @@
     resizeImage(INCREASE);
   });
 
+  var uploadEffectLevel = document.querySelector('.upload-effect-level');
+
   var onEffectControlsClick = function (evt) {
     var target = evt.target;
     if (target.type === 'radio') {
       imagePreview.classList = '';
       imagePreview.classList.add('effect-' + target.value);
+    }
+    if (target.value !== 'none') {
+      uploadEffectLevel.classList.remove('hidden');
+    } else {
+      uploadEffectLevel.classList.add('hidden');
     }
   };
 
@@ -135,6 +143,7 @@
 
   uploadHashTagsForm.addEventListener('input', checkHashTags);
   uploadImageForm.addEventListener('submit', onUploadPhotoFormClick);
+
 
 })();
 

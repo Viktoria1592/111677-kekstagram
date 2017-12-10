@@ -4,15 +4,20 @@
 
   var picturesList = document.querySelector('.pictures');
   var picturesTemplate = document.querySelector('#picture-template');
-  var userPictures = document.querySelectorAll('.picture');
+  //var userPictures = document.querySelector('.picture');
 
-  picturesList.appendChild(window.renderPhoto(window.pictures, picturesTemplate)); // Добавление клонированных из шаблона фотографий в контейнер
+  var pictures = window.createPhotos();
 
-  userPictures.forEach(function (picture) {
-    picture.addEventListener('click', function (evt) {
-      evt.preventDefault();
-      window.openGalleryOverlay(picture);
-    });
-  });
+  picturesList.appendChild(window.renderPhoto(pictures, picturesTemplate)); // Добавление клонированных из шаблона фотографий в контейнер
+
+  var onPicturesListClick = function (evt) {
+    evt.preventDefault();
+    var target = evt.target;
+    if (target.parentNode.className === 'picture') {
+      window.openGalleryOverlay(target.parentNode);
+    }
+  };
+
+  picturesList.addEventListener('click', onPicturesListClick);
 
 })();
