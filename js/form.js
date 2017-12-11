@@ -19,19 +19,8 @@
   var resizeDecBnt = document.querySelector('.upload-resize-controls-button-dec');
   var resizeIncBnt = document.querySelector('.upload-resize-controls-button-inc');
   var effectImagePreview = document.querySelector('.effect-image-preview');
-  var uploadEffectsControls = document.querySelector('.upload-effect-controls');
-
-  var imagePreview = document.querySelector('.effect-image-preview');
   var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
   var isFormDescrBusy = false;
-
-  var effectLevelLine = document.querySelector('.upload-effect-level-line');
-  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
-  var effectLevelVal = document.querySelector('.upload-effect-level-val');
-  var shiftX; // Смещение пина по оси Х
-  var lineCoords; // Кординаты линии уровня фильтра
-  var pinCoords; // Кординаты пина
-
 
   var closeOverlayForm = function () {
     uploadOverlayForm.classList.add('hidden');
@@ -73,11 +62,13 @@
         break;
       case INCREASE:
         step = RESIZE_STEP;
+		break;
     }
     if (!(isMaxSize(currentResizeValue, step) || isMinSize(currentResizeValue, step))) {
       currentResizeValue += step;
       resizeValueField.value = currentResizeValue + '%';
       effectImagePreview.style = 'transform: scale(' + currentResizeValue / 100 + ')';
+	  window.resetEffectValue();
     }
   };
 
@@ -88,23 +79,6 @@
   resizeIncBnt.addEventListener('click', function () {
     resizeImage(INCREASE);
   });
-
-  var uploadEffectLevel = document.querySelector('.upload-effect-level');
-
-  var onEffectControlsClick = function (evt) {
-    var target = evt.target;
-    if (target.type === 'radio') {
-      imagePreview.classList = '';
-      imagePreview.classList.add('effect-' + target.value);
-    }
-    if (target.value !== 'none') {
-      uploadEffectLevel.classList.remove('hidden');
-    } else {
-      uploadEffectLevel.classList.add('hidden');
-    }
-  };
-
-  uploadEffectsControls.addEventListener('click', onEffectControlsClick);
 
   var checkHashTagsValidity = function () {
     var uploadHashTags = uploadHashTagsForm.value.toLowerCase().split(', ');
@@ -151,50 +125,6 @@
 
   uploadHashTagsForm.addEventListener('input', checkHashTags);
   uploadImageForm.addEventListener('submit', onUploadPhotoFormClick);
-
-  //module5-task2
-
-  var getCoords = function (elem) {
-    var box = elem.getBoundingClientRect();
-
-    return {
-      right: box.right,
-      left: box.left
-    };
-  };
-
-  var getPercent = function (number, lengh) {
-    return (number / lengh) * 100 ;
-  };
-
-  effectLevelPin.addEventListener('mousedown', function (evt) {
-    pinCoords = getCoords(effectLevelPin);
-    lineCoords = getCoords(effectLevelLine);
-    shiftX = evt.pageX - pinCoords.left;
-
-    document.addEventListener('mousemove', onPinLevelMoseMove);
-  });
-
-  var onPinLevelMoseMove = function (evt) {
-    var currentPinCoords = evt.pageX - shiftX - lineCoords.left;
-
-    if (currentPinCoords < 0) {
-      currentPinCoords = 0;
-    }
-    var lineWidth = effectLevelLine.offsetWidth;
-
-    if (currentPinCoords > lineWidth) {
-      currentPinCoords = lineWidth;
-    }
-
-    effectLevelPin.style.left = getPercent(currentPinCoords, lineWidth) + '%';
-    effectLevelVal.style.width = getPercent(currentPinCoords, lineWidth) + '%';
-
-  };
-
-  document.addEventListener('mouseup', function () {
-    document.removeEventListener('mousemove', onPinLevelMoseMove);
-  });
 
 })();
 
