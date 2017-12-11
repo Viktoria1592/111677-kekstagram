@@ -25,6 +25,14 @@
   var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
   var isFormDescrBusy = false;
 
+  var effectLevelLine = document.querySelector('.upload-effect-level-line');
+  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
+  var effectLevelVal = document.querySelector('.upload-effect-level-val');
+  var shiftX; // Смещение пина по оси Х
+  var lineCoords; // Кординаты линии уровня фильтра
+  var pinCoords; // Кординаты пина
+
+
   var closeOverlayForm = function () {
     uploadOverlayForm.classList.add('hidden');
   };
@@ -144,6 +152,49 @@
   uploadHashTagsForm.addEventListener('input', checkHashTags);
   uploadImageForm.addEventListener('submit', onUploadPhotoFormClick);
 
+  //module5-task2
+
+  var getCoords = function (elem) {
+    var box = elem.getBoundingClientRect();
+
+    return {
+      right: box.right,
+      left: box.left
+    };
+  };
+
+  var getPercent = function (number, lengh) {
+    return (number / lengh) * 100 ;
+  };
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    pinCoords = getCoords(effectLevelPin);
+    lineCoords = getCoords(effectLevelLine);
+    shiftX = evt.pageX - pinCoords.left;
+
+    document.addEventListener('mousemove', onPinLevelMoseMove);
+  });
+
+  var onPinLevelMoseMove = function (evt) {
+    var currentPinCoords = evt.pageX - shiftX - lineCoords.left;
+
+    if (currentPinCoords < 0) {
+      currentPinCoords = 0;
+    }
+    var lineWidth = effectLevelLine.offsetWidth;
+
+    if (currentPinCoords > lineWidth) {
+      currentPinCoords = lineWidth;
+    }
+
+    effectLevelPin.style.left = getPercent(currentPinCoords, lineWidth) + '%';
+    effectLevelVal.style.width = getPercent(currentPinCoords, lineWidth) + '%';
+
+  };
+
+  document.addEventListener('mouseup', function () {
+    document.removeEventListener('mousemove', onPinLevelMoseMove);
+  });
 
 })();
 
