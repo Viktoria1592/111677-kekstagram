@@ -62,13 +62,13 @@
         break;
       case INCREASE:
         step = RESIZE_STEP;
-		break;
+        break;
     }
     if (!(isMaxSize(currentResizeValue, step) || isMinSize(currentResizeValue, step))) {
       currentResizeValue += step;
       resizeValueField.value = currentResizeValue + '%';
       effectImagePreview.style = 'transform: scale(' + currentResizeValue / 100 + ')';
-	  window.resetEffectValue();
+      window.resetEffectValue();
     }
   };
 
