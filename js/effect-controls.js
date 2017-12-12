@@ -16,27 +16,27 @@
     chrome: {
       filterName: 'grayscale',
       filterLength: 1,
-      metric: ''
+      unit: ''
     },
     sepia: {
       filterName: 'sepia',
       filterLength: 1,
-      metric: ''
+      unit: ''
     },
     marvin: {
       filterName: 'invert',
       filterLength: 100,
-      metric: '%'
+      unit: '%'
     },
     phobos: {
       filterName: 'blur',
       filterLength: 3,
-      metric: 'px'
+      unit: 'px'
     },
     heat: {
       filterName: 'brightness',
       filterLength: 3,
-      metric: ''
+      unit: ''
     }
   };
 
@@ -85,7 +85,7 @@
     var effectMaxValue = filterParams.filterLength;
     var currentEffectValue = getFilterValue(value, effectMaxValue);
 
-    return effectName + '(' + currentEffectValue + filterParams.metric + ')';
+    return effectName + '(' + currentEffectValue + filterParams.unit + ')';
   };
 
   var getCoords = function (elem) {
