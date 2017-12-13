@@ -36,41 +36,6 @@
     });
   });
 
-  // var isMaxSize = function (value, step) {
-  //   return value === MAX_SIZE_PICTURE && step > 0;
-  // };
-  //
-  // var isMinSize = function (value, step) {
-  //   return value === MIN_SIZE_PICTURE && step < 0;
-  // };
-  //
-  // var resizeImage = function (type) {
-  //   var currentResizeValue = parseInt(resizeValueField.value.replace('%', ''), 10);
-  //   var step;
-  //   switch (type) {
-  //     case DECREASE:
-  //       step = -RESIZE_STEP;
-  //       break;
-  //     case INCREASE:
-  //       step = RESIZE_STEP;
-  //       break;
-  //   }
-  //   if (!(isMaxSize(currentResizeValue, step) || isMinSize(currentResizeValue, step))) {
-  //     currentResizeValue += step;
-  //     resizeValueField.value = currentResizeValue + '%';
-  //     effectImagePreview.style = 'transform: scale(' + currentResizeValue / 100 + ')';
-  //     window.resetEffectValue();
-  //   }
-  // };
-  //
-  // resizeDecBnt.addEventListener('click', function () {
-  //   resizeImage(DECREASE);
-  // });
-  //
-  // resizeIncBnt.addEventListener('click', function () {
-  //   resizeImage(INCREASE);
-  // });
-
   var checkHashTagsValidity = function () {
     var uploadHashTags = uploadHashTagsForm.value.toLowerCase().split(', ');
 

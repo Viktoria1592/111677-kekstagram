@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  var resizeValueField = document.querySelector('.upload-resize-controls-value');
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var scaleElement = document.querySelector('.upload-resize-controls');
 

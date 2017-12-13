@@ -8,16 +8,15 @@ window.initializeScale = function (scaleElement, callback) {
   var DECREASE = 0;
   var step;
 
-  var resizeDecBnt = scaleElement.querySelector('.upload-resize-controls-button-dec');
-  var resizeIncBnt = scaleElement.querySelector('.upload-resize-controls-button-inc');
-  var resizeValueField = scaleElement.querySelector('.upload-resize-controls-value');
+  var resizeIncBnt = document.querySelector('.upload-resize-controls-button-inc');
+  var resizeValueField = document.querySelector('.upload-resize-controls-value');
 
   var isMaxSize = function (value, step) {
-    return value === MIN_SIZE_PICTURE && step > 0;
+    return value === MAX_SIZE_PICTURE && step > 0;
   };
 
   var isMinSize = function (value, step) {
-    return value === MAX_SIZE_PICTURE && step < 0;
+    return value === MIN_SIZE_PICTURE && step < 0;
   };
   var resizeValue = function (type) {
     var currentResizeValue = parseInt(resizeValueField.value.replace('%', ''), 10);
@@ -35,9 +34,14 @@ window.initializeScale = function (scaleElement, callback) {
       callback(currentResizeValue);
     }
   };
-
-  resizeDecBnt.addEventListener('click', resizeValue(INCREASE));
-  resizeIncBnt.addEventListener('click', resizeValue(DECREASE));
+  scaleElement.addEventListener('click', function (evt) {
+    var target = evt.target;
+    if (target === resizeIncBnt){
+      resizeValue(INCREASE);
+    } else {
+      resizeValue(DECREASE);
+    }
+  });
 };
 
 
