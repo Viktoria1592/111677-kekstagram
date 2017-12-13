@@ -10,7 +10,3 @@
   window.initializeScale(scaleElement, changeScale);
 
 })();
-
-
-
-
