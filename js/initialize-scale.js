@@ -1,12 +1,16 @@
 'use strict';
 
-window.initializeScale = function (input, increaseBtn, decreaseBtn, action) {
+window.initializeScale = function (scaleElement, callback) {
   var MAX_SIZE_PICTURE = 100;
   var MIN_SIZE_PICTURE = 25;
   var RESIZE_STEP = 25;
   var INCREASE = 1;
   var DECREASE = 0;
   var step;
+
+  var resizeDecBnt = scaleElement.querySelector('.upload-resize-controls-button-dec');
+  var resizeIncBnt = scaleElement.querySelector('.upload-resize-controls-button-inc');
+  var resizeValueField = scaleElement.querySelector('.upload-resize-controls-value');
 
   var isMaxSize = function (value, step) {
     return value === MIN_SIZE_PICTURE && step > 0;
@@ -16,7 +20,7 @@ window.initializeScale = function (input, increaseBtn, decreaseBtn, action) {
     return value === MAX_SIZE_PICTURE && step < 0;
   };
   var resizeValue = function (type) {
-    var currentResizeValue = parseInt(input.value.replace('%', ''), 10);
+    var currentResizeValue = parseInt(resizeValueField.value.replace('%', ''), 10);
     switch (type) {
       case DECREASE:
         step = -RESIZE_STEP;
@@ -27,14 +31,13 @@ window.initializeScale = function (input, increaseBtn, decreaseBtn, action) {
     }
     if (!(isMaxSize(currentResizeValue, step) || isMinSize(currentResizeValue, step))) {
       currentResizeValue += step;
-      input.value = currentResizeValue + '%';
-      action(currentResizeValue);
+      resizeValueField.value = currentResizeValue + '%';
+      callback(currentResizeValue);
     }
   };
 
-  increaseBtn.addEventListener('click', resizeValue(INCREASE));
-  decreaseBtn.addEventListener('click', resizeValue(DECREASE));
-
+  resizeDecBnt.addEventListener('click', resizeValue(INCREASE));
+  resizeIncBnt.addEventListener('click', resizeValue(DECREASE));
 };
 
 
