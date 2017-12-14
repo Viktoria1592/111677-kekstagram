@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var uploadEffectLevel = document.querySelector('.upload-effect-level');
-  var uploadEffectsControls = document.querySelector('.upload-effect-controls');
   var effectLevelLine = document.querySelector('.upload-effect-level-line');
   var effectLevelPin = document.querySelector('.upload-effect-level-pin');
   var effectLevelVal = document.querySelector('.upload-effect-level-val');
@@ -16,56 +14,29 @@
     chrome: {
       filterName: 'grayscale',
       filterLength: 1,
-      metric: ''
+      unit: ''
     },
     sepia: {
       filterName: 'sepia',
       filterLength: 1,
-      metric: ''
+      unit: ''
     },
     marvin: {
       filterName: 'invert',
       filterLength: 100,
-      metric: '%'
+      unit: '%'
     },
     phobos: {
       filterName: 'blur',
       filterLength: 3,
-      metric: 'px'
+      unit: 'px'
     },
     heat: {
       filterName: 'brightness',
       filterLength: 3,
-      metric: ''
+      unit: ''
     }
   };
-
-  var onEffectControlsClick = function (evt) {
-    var target = evt.target;
-    isImageHasFilter(target);
-    if (target.type === 'radio') {
-      imagePreview.style = '';
-      imagePreview.classList = '';
-      imagePreview.classList.add('effect-' + target.value);
-      imagePreview.style.filter = setEffectFilterValue(target.value, '100', filters);
-      window.resetEffectValue();
-    }
-  };
-
-  var isImageHasFilter = function (target) {
-    if (target.value !== 'none') {
-      return uploadEffectLevel.classList.remove('hidden');
-    } else {
-      return uploadEffectLevel.classList.add('hidden');
-    }
-  };
-
-  window.resetEffectValue = function () {
-    effectLevelPin.style.left = '100%';
-    effectLevelVal.style.width = '100%';
-  };
-
-  uploadEffectsControls.addEventListener('click', onEffectControlsClick);
 
   var getPercent = function (number, lengh) {
     return (number / lengh) * 100;
@@ -85,7 +56,7 @@
     var effectMaxValue = filterParams.filterLength;
     var currentEffectValue = getFilterValue(value, effectMaxValue);
 
-    return effectName + '(' + currentEffectValue + filterParams.metric + ')';
+    return effectName + '(' + currentEffectValue + filterParams.unit + ')';
   };
 
   var getCoords = function (elem) {
