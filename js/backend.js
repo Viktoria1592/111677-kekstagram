@@ -1,11 +1,11 @@
 'use strict';
-(function (){
-	
+(function () {
+
   var SERVER_URL = 'https://1510.dump.academy/kekstagram';
 
   var initXHR = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
-	
+
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
@@ -15,7 +15,7 @@
         onError(errorList(xhr.status));
       }
     });
-	
+
     xhr.addEventListener('error', function () {
       onError('Ошибка соединения');
     });
@@ -25,21 +25,24 @@
     });
 
     xhr.timeout = 10000;
-	
-	var errorList = function (status) {
-	  switch (status) {
-	    case 400:
-	      return status = 'Неверный запрос';
-	    case 401:
-	      return status = 'Пользователь не авторизован';
-	    case 404:
-	      return status = 'Ничего не найдено';
-	      	
-	    default:
-	      return status = 'Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText;
-		}	
-	};
 
+    var errorList = function (status) {
+      switch (status) {
+        case 400:
+          status = 'Неверный запрос';
+          break;
+        case 401:
+          status = 'Пользователь не авторизован';
+          break;
+        case 404:
+          status = 'Ничего не найдено';
+          break;
+
+        default:
+          status = 'Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText;
+      }
+      return status;
+    };
     return xhr;
   };
 
@@ -55,7 +58,7 @@
       xhr.send(data);
     }
   };
-  
+
 })();
 
 
