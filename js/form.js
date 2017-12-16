@@ -73,7 +73,7 @@
 
   var onUploadPhotoFormClick = function () {
     if (checkHashTags() === true) {
-      overlayFormToDefaults();
+      window.backend.save(new FormData(uploadImageForm), overlayFormToDefaults, window.errorHandler);
     } else {
       event.preventDefault();
     }
