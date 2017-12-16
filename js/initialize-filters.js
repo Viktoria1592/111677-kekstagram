@@ -13,7 +13,6 @@ window.initializeFilters = function (filterElement, callback) {
       callback.style = '';
       callback.classList = '';
       callback.classList.add('effect-' + target.value);
-
     }
   };
 
