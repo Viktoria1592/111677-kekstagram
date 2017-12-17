@@ -71,11 +71,11 @@
     effectImagePreview.style.transform = 'scale(1.0)';
   };
 
-  var onUploadPhotoFormClick = function () {
+  var onUploadPhotoFormClick = function (evt) {
     if (checkHashTags() === true) {
-      window.backend.save(new FormData(uploadImageForm), overlayFormToDefaults, window.errorHandler);
+      window.backend.save(new FormData(uploadImageForm), overlayFormToDefaults, window.onError);
     } else {
-      event.preventDefault();
+      evt.preventDefault();
     }
   };
 

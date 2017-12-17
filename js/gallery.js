@@ -1,21 +1,20 @@
 'use strict';
 
 (function () {
-
   var picturesList = document.querySelector('.pictures');
   var picturesTemplate = document.querySelector('#picture-template');
   var picturesOrder = document.querySelector('.filters');
   var originalPictures;
   var sortPictures;
 
-  var successHandler = function (pictures) {
+  var onSuccess = function (pictures) {
     picturesOrder.classList.remove('filters-inactive');
     originalPictures = pictures;
     setPicturesOrder();
-    renderGallary(pictures);
+    renderGallery(pictures);
   };
 
-  window.errorHandler = function (errorMessage) {
+  window.onError = function (errorMessage) {
     var errorViewer = document.createElement('div');
     errorViewer.style = 'z-index: 100; margin: 0 auto; width: auto; height: 50px; text-align: center;' +
       ' background-color: rgba(255, 231, 82, 0.3); color: #ffe753';
@@ -28,9 +27,9 @@
     document.body.insertAdjacentElement('afterbegin', errorViewer);
   };
 
-  window.backend.load(successHandler, window.errorHandler);
+  window.backend.load(onSuccess, window.onError);
 
-  var renderGallary = function (pictures) {
+  var renderGallery = function (pictures) {
     clearGallery();
     picturesList.appendChild(window.renderPhoto(pictures, picturesTemplate));
 
@@ -73,7 +72,7 @@
           sortPictures = originalPictures;
           break;
       }
-      renderGallary(sortPictures);
+      renderGallery(sortPictures);
     }));
   };
 })();
