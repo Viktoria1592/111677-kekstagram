@@ -1,13 +1,22 @@
 'use strict';
 
 (function () {
-  var DEBOUNCE_INTERVAL = 11500; // ms
+  var DEBOUNCE_INTERVAL = 300; // ms
 
-  var lastTimeout;
-  window.debounce = function (fun) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
+  window.debounce = function (func, wait) {
+    wait = wait || DEBOUNCE_INTERVAL;
+    var timeout;
+
+    function wrapper() {
+      var args = arguments;
+      var later = function () {
+        timeout = null;
+        func.apply(wrapper, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
     }
-    lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+
+    return wrapper;
   };
 })();
