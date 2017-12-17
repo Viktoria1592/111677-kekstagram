@@ -4,18 +4,15 @@
 
   var picturesList = document.querySelector('.pictures');
   var picturesTemplate = document.querySelector('#picture-template');
+  var picturesOrder = document.querySelector('.filters');
+  var originalPictures;
+  var sortPictures;
 
   var successHandler = function (pictures) {
-    picturesList.appendChild(window.renderPhoto(pictures, picturesTemplate));
-
-    var onPicturesListClick = function (evt) {
-      evt.preventDefault();
-      var target = evt.target;
-      if (target.parentNode.className === 'picture') {
-        window.openGalleryOverlay(target.parentNode);
-      }
-    };
-    picturesList.addEventListener('click', onPicturesListClick);
+    picturesOrder.classList.remove('filters-inactive');
+    originalPictures = pictures;
+    setPicturesOrder(pictures);
+    renderGallary(pictures);
   };
 
   window.errorHandler = function (errorMessage) {
@@ -33,5 +30,51 @@
 
   window.backend.load(successHandler, window.errorHandler);
 
+  var renderGallary = function (pictures) {
+    clearGallery();
+    picturesList.appendChild(window.renderPhoto(pictures, picturesTemplate));
+
+    var onPicturesListClick = function (evt) {
+      evt.preventDefault();
+      var target = evt.target;
+      if (target.parentNode.className === 'picture') {
+        window.openGalleryOverlay(target.parentNode);
+      }
+    };
+    picturesList.addEventListener('click', onPicturesListClick);
+  };
+
+  var clearGallery = function () {
+    while (picturesList.firstChild) {
+      picturesList.removeChild(picturesList.firstChild);
+    }
+  };
+
+  var setPicturesOrder = function (pictures) {
+    picturesOrder.addEventListener('click', function (evt) {
+      var target = evt.target;
+      switch (target.value) {
+        case 'popular':
+          sortPictures = originalPictures.slice().sort(function (first, second) {
+            return second.likes - first.likes;
+          });
+          break;
+        case 'discussed':
+          sortPictures = originalPictures.slice().sort(function (first, second) {
+            return second.comments.length - first.comments.length;
+          });
+          break;
+        case 'random':
+          sortPictures = originalPictures.slice().sort(function () {
+            return Math.random() - 0.5;
+          });
+          break;
+        default:
+          sortPictures = originalPictures;
+          break;
+      }
+      renderGallary(sortPictures);
+    });
+  };
 
 })();

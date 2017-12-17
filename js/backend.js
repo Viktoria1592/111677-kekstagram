@@ -12,7 +12,7 @@
       if (xhr.status === 200) {
         onLoad(xhr.response);
       } else {
-        onError(errorList(xhr.status));
+        onError(getErrorMsg(xhr.status));
       }
     });
 
@@ -26,7 +26,7 @@
 
     xhr.timeout = 10000;
 
-    var errorList = function (status) {
+    var getErrorMsg = function (status) {
       switch (status) {
         case 400:
           status = 'Неверный запрос';
