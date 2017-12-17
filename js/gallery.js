@@ -11,7 +11,7 @@
   var successHandler = function (pictures) {
     picturesOrder.classList.remove('filters-inactive');
     originalPictures = pictures;
-    setPicturesOrder(pictures);
+    setPicturesOrder();
     renderGallary(pictures);
   };
 
@@ -50,7 +50,7 @@
     }
   };
 
-  var setPicturesOrder = function (pictures) {
+  var setPicturesOrder = function () {
     picturesOrder.addEventListener('click', function (evt) {
       var target = evt.target;
       switch (target.value) {
