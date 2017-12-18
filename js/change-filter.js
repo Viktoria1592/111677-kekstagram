@@ -11,19 +11,15 @@
   var applyFilter = function (newFilter, oldFilter) {
     pictureElement.classList.remove('effect-' + oldFilter);
     pictureElement.classList.add('effect-' + newFilter);
-    changeVisibility(pictureElement, uploadEffectLevel);
-    resetEffectValue();
-  };
-
-  window.initializeFilters(uploadEffectControl, applyFilter);
-
-  var resetEffectValue = function () {
+    if (newFilter === 'none') {
+      uploadEffectLevel.classList.add('hidden');
+    } else {
+      uploadEffectLevel.classList.remove('hidden');
+    }
     effectLevelPin.style.left = '100%';
     effectLevelVal.style.width = '100%';
   };
 
-  var changeVisibility = function (element, target) {
-    return target.value !== 'none' ? target.classList.remove('hidden') : target.classList.add('hidden');
-  };
+  window.initializeFilters(uploadEffectControl, applyFilter);
 
 })();
