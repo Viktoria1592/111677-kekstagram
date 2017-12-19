@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var commentsList = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
@@ -39,5 +38,4 @@
     }
     return photoArr;
   };
-
 })();
