@@ -4,11 +4,16 @@
   var effectLevelLine = document.querySelector('.upload-effect-level-line');
   var effectLevelPin = document.querySelector('.upload-effect-level-pin');
   var effectLevelVal = document.querySelector('.upload-effect-level-val');
+  var levelValue = document.querySelector('.upload-effect-level-value');
+  var uploadEffectControl = document.querySelector('.upload-effect-controls');
+  var uploadEffectLevel = document.querySelector('.upload-effect-level');
+  var resizeValueField = document.querySelector('.upload-resize-controls-value');
   var imagePreview = document.querySelector('.effect-image-preview');
 
   var shiftX; // Смещение пина по оси Х
   var lineCoords; // Кординаты области фильтра
   var pinCoords; // Кординаты пина
+  var currentFilter; // Текущий фильтр
 
   var filters = {
     chrome: {
@@ -46,10 +51,6 @@
     return (percent * lengh) / 100;
   };
 
-  var getEffectFilterName = function (target) {
-    return target.className.replace('effect-', '');
-  };
-
   var setEffectFilterValue = function (elem, value, filtersArr) {
     var filterParams = filtersArr[elem];
     var effectName = filterParams.filterName;
@@ -68,13 +69,32 @@
     };
   };
 
-  effectLevelPin.addEventListener('mousedown', function (evt) {
-    pinCoords = getCoords(effectLevelPin);
-    lineCoords = getCoords(effectLevelLine);
-    shiftX = evt.pageX - pinCoords.left;
+  var applyFilter = function (newFilter, oldFilter) {
+    imagePreview.classList.remove('effect-' + oldFilter);
+    imagePreview.classList.add('effect-' + newFilter);
 
-    document.addEventListener('mousemove', onPinLevelMoseMove);
-  });
+    if (newFilter === 'none') {
+      uploadEffectLevel.classList.add('hidden');
+    } else {
+      uploadEffectLevel.classList.remove('hidden');
+    }
+
+    effectLevelPin.style.left = '100%';
+    effectLevelVal.style.width = '100%';
+    resizeValueField.value = '100%';
+    imagePreview.removeAttribute('style');
+
+    effectLevelPin.addEventListener('mousedown', function (evt) {
+      pinCoords = getCoords(effectLevelPin);
+      lineCoords = getCoords(effectLevelLine);
+      shiftX = evt.pageX - pinCoords.left;
+      currentFilter = newFilter;
+
+      document.addEventListener('mousemove', onPinLevelMoseMove);
+    });
+  };
+
+  window.initializeFilters(uploadEffectControl, applyFilter);
 
   var onPinLevelMoseMove = function (evt) {
     var currentPinCoords = evt.pageX - shiftX - lineCoords.left;
@@ -89,16 +109,13 @@
     }
 
     var currentValue = getPercent(currentPinCoords, lineWidth);
-    var filterEffect = getEffectFilterName(imagePreview);
-
     effectLevelPin.style.left = currentValue + '%';
     effectLevelVal.style.width = currentValue + '%';
-    imagePreview.style.filter = setEffectFilterValue(filterEffect, currentValue, filters);
-
+    levelValue.value = Math.round(currentValue);
+    imagePreview.style.filter = setEffectFilterValue(currentFilter, currentValue, filters);
   };
 
   document.addEventListener('mouseup', function () {
     document.removeEventListener('mousemove', onPinLevelMoseMove);
   });
 })();
-

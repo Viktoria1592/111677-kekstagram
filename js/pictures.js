@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var photoSelectors = {
     image: '.picture img',
     likes: '.picture-likes',
