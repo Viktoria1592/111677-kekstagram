@@ -6,8 +6,7 @@
   var LENGTH_OF_HASHTAGS = 20;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-
-  var uploadInput = document.querySelector ('.upload-input');
+  var uploadInput = document.querySelector('.upload-input');
   var uploadImageForm = document.querySelector('#upload-select-image');
   var uploadOverlayForm = document.querySelector('.upload-overlay');
   var uploadOverlayCloseBtn = document.querySelector('.upload-form-cancel');
