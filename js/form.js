@@ -14,10 +14,8 @@
   var uploadFormDescr = document.querySelector('.upload-form-description');
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
-  var resizeValueField = document.querySelector('.upload-resize-controls-value');
   var imagePreview = document.querySelector('.effect-image-preview');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
-  var uploadEffectControl = document.querySelector('.upload-effect-controls');
   var isFormDescrBusy = false;
   var reader; // Загрузка FileReader
 
@@ -124,7 +122,10 @@
     imagePreview.removeAttribute('style');
     imagePreview.classList = 'effect-image-preview';
     uploadEffectLevel.classList.add('hidden');
-    uploadEffectControl.reset;
+    uploadImageForm.reset();
+    uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)';
+    uploadHashTagsForm.value = '';
+    uploadFormDescr.value = '';
   };
 
   var onUploadPhotoFormClick = function (evt) {
