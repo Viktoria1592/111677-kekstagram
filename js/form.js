@@ -14,10 +14,8 @@
   var uploadFormDescr = document.querySelector('.upload-form-description');
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
-  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
-  var effectLevelVal = document.querySelector('.upload-effect-level-val');
-  var resizeValueField = document.querySelector('.upload-resize-controls-value');
   var imagePreview = document.querySelector('.effect-image-preview');
+  var uploadEffectLevel = document.querySelector('.upload-effect-level');
   var isFormDescrBusy = false;
   var reader; // Загрузка FileReader
 
@@ -46,14 +44,12 @@
       uploadImageForm.removeAttribute('style');
       var droppedFiles = evt.dataTransfer.files[0];
       uploadImage(droppedFiles);
-      overlayFormToDefaults();
     }
   });
 
   uploadInput.addEventListener('change', function () {
     var imageFile = uploadInput.files[0];
     uploadImage(imageFile);
-    overlayFormToDefaults();
   });
 
   var uploadImage = function (imageFile) {
@@ -75,11 +71,11 @@
     }
 
     uploadOverlayCloseBtn.addEventListener('click', function () {
-      uploadOverlayForm.classList.add('hidden');
+      overlayFormToDefaults();
     });
     document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ESC_KEYCODE && !isFormDescrBusy) {
-        uploadOverlayForm.classList.add('hidden');
+        overlayFormToDefaults();
       }
     });
     uploadFormDescr.addEventListener('focus', function () {
@@ -123,11 +119,13 @@
   var overlayFormToDefaults = function () {
     uploadOverlayForm.classList.add('hidden');
     effectImagePreview.style.transform = 'scale(1.0)';
-    effectLevelPin.style.left = '100%';
-    effectLevelVal.style.width = '100%';
-    resizeValueField.value = '100%';
     imagePreview.removeAttribute('style');
     imagePreview.classList = 'effect-image-preview';
+    uploadEffectLevel.classList.add('hidden');
+    uploadImageForm.reset();
+    uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)';
+    uploadHashTagsForm.value = '';
+    uploadFormDescr.value = '';
   };
 
   var onUploadPhotoFormClick = function (evt) {
