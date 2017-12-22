@@ -7,7 +7,6 @@
   var levelValue = document.querySelector('.upload-effect-level-value');
   var uploadEffectControl = document.querySelector('.upload-effect-controls');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
-  var resizeValueField = document.querySelector('.upload-resize-controls-value');
   var imagePreview = document.querySelector('.effect-image-preview');
 
   var shiftX; // Смещение пина по оси Х
@@ -81,8 +80,7 @@
 
     effectLevelPin.style.left = '100%';
     effectLevelVal.style.width = '100%';
-    resizeValueField.value = '100%';
-    imagePreview.removeAttribute('style');
+    imagePreview.style.filter = '';
 
     effectLevelPin.addEventListener('mousedown', function (evt) {
       pinCoords = getCoords(effectLevelPin);

@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
   var NUM_OF_HASHTAGS = 5;
   var LENGTH_OF_HASHTAGS = 20;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
@@ -31,7 +30,7 @@
   });
 
   document.addEventListener('dragleave', function (evt) {
-    if (event.target === iconImage) {
+    if (evt.target === iconImage) {
       evt.target.removeAttribute('style');
       uploadImageForm.removeAttribute('style');
     }
@@ -74,7 +73,7 @@
       overlayFormToDefaults();
     });
     document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ESC_KEYCODE && !isFormDescrBusy) {
+      if (evt.keyCode === window.util.escKeycode && !isFormDescrBusy) {
         overlayFormToDefaults();
       }
     });
@@ -107,9 +106,8 @@
   };
 
   var checkHashTags = function () {
-    if (checkHashTagsValidity()) {
-      uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)';
-      return true;
+    if (checkHashTagsValidity() === true) {
+      uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)'; return true;
     } else {
       uploadHashTagsForm.style.borderColor = 'red';
       return false;

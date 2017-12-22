@@ -50,7 +50,7 @@
   };
 
   var setPicturesOrder = function () {
-    picturesOrder.addEventListener('click', window.debounce(function (evt) {
+    picturesOrder.addEventListener('click', window.util.debounce(function (evt) {
       var target = evt.target;
       switch (target.value) {
         case 'popular':

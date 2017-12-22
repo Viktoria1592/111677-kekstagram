@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var effectImagePreview = document.querySelector('.effect-image-preview');
   var scaleElement = document.querySelector('.upload-resize-controls');
