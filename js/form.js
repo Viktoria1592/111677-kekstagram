@@ -5,18 +5,20 @@
   var LENGTH_OF_HASHTAGS = 20;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-  var uploadInput = document.querySelector('.upload-input');
-  var iconImage = document.querySelector('.upload-file');
   var uploadImageForm = document.querySelector('#upload-select-image');
-  var uploadOverlayForm = document.querySelector('.upload-overlay');
-  var uploadOverlayCloseBtn = document.querySelector('.upload-form-cancel');
-  var uploadFormDescr = document.querySelector('.upload-form-description');
-  var effectImagePreview = document.querySelector('.effect-image-preview');
-  var uploadHashTagsForm = document.querySelector('.upload-form-hashtags');
-  var imagePreview = document.querySelector('.effect-image-preview');
-  var uploadEffectLevel = document.querySelector('.upload-effect-level');
+  var uploadInput = uploadImageForm.querySelector('.upload-input');
+  var iconImage = uploadImageForm.querySelector('.upload-file');
+  var uploadOverlayForm = uploadImageForm.querySelector('.upload-overlay');
+  var uploadOverlayCloseBtn = uploadImageForm.querySelector('.upload-form-cancel');
+  var uploadFormDescr = uploadImageForm.querySelector('.upload-form-description');
+  var effectImagePreview = uploadImageForm.querySelector('.effect-image-preview');
+  var uploadHashTagsForm = uploadImageForm.querySelector('.upload-form-hashtags');
+  var imagePreview = uploadImageForm.querySelector('.effect-image-preview');
+  var uploadEffectLevel = uploadImageForm.querySelector('.upload-effect-level');
+
   var isFormDescrBusy = false;
   var reader; // Загрузка FileReader
+  var errorMessage = '';
 
   document.addEventListener('dragover', function (evt) {
     evt.preventDefault();
@@ -86,28 +88,54 @@
   };
 
   var checkHashTagsValidity = function () {
-    var uploadHashTags = uploadHashTagsForm.value.toLowerCase().split(', ');
+    var uploadHashTags = uploadHashTagsForm.value.toLowerCase().split(' ');
+    var isValid = true;
 
     if (uploadHashTags.length > NUM_OF_HASHTAGS) {
-      return false;
+      errorMessage = 'Можно использовать только ' + NUM_OF_HASHTAGS + ' хэш-тегов.';
+      isValid = false;
     }
 
     for (var i = 0; i < uploadHashTags.length; i++) {
-      if ((uploadHashTags[i][0] !== '#' && uploadHashTags[i].length > 0) || uploadHashTags[i].length > LENGTH_OF_HASHTAGS) {
-        return false;
-      }
       for (var j = i + 1; j < uploadHashTags.length; j++) {
         if (uploadHashTags[i] === uploadHashTags[j]) {
-          return false;
+          errorMessage = 'Нельзя использовать один и тот же хэш-тег несколько раз.';
+          isValid = false;
         }
       }
     }
-    return true;
+
+    uploadHashTags.forEach(function (value) {
+      if (value.slice(-1) === ',' || value.slice(-1) === ';') {
+        errorMessage = 'Разделять хэш-теги нужно одним пробелом.';
+        isValid = false;
+      }
+      if (value.charAt(0) !== '#') {
+        errorMessage = 'Хэш-тег должен начинаться с #';
+        isValid = false;
+      }
+      if (value.length > LENGTH_OF_HASHTAGS) {
+        errorMessage = 'Максимальная длинна хэш-тега должна быть ' + LENGTH_OF_HASHTAGS + ' символов.';
+        isValid = false;
+      }
+    });
+
+    var isEmptyHashTags = window.util.checkEmptyElements(uploadHashTags);
+
+    if (isEmptyHashTags === true) {
+      errorMessage = 'Хэш-тег не должен быть пустым.';
+      isValid = false;
+    }
+
+    uploadHashTagsForm.setCustomValidity(errorMessage);
+    errorMessage = '';
+    return isValid;
   };
 
   var checkHashTags = function () {
     if (checkHashTagsValidity() === true) {
-      uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)'; return true;
+      uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)';
+      return true;
     } else {
       uploadHashTagsForm.style.borderColor = 'red';
       return false;
@@ -128,6 +156,7 @@
 
   var onUploadPhotoFormClick = function (evt) {
     if (checkHashTags() === true) {
+      evt.preventDefault();
       window.backend.save(new FormData(uploadImageForm), overlayFormToDefaults, window.onError);
     } else {
       evt.preventDefault();

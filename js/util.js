@@ -20,6 +20,17 @@
         timeout = setTimeout(later, wait);
       }
       return wrapper;
+    },
+    checkEmptyElements: function (arr) {
+      var isWithEmptyElements = false;
+
+      arr.forEach(function (value) {
+        if (value === '') {
+          isWithEmptyElements = true;
+        }
+      });
+
+      return isWithEmptyElements;
     }
   };
 })();
