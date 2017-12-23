@@ -43,7 +43,7 @@
   });
 
   var onGalleryOverlayEscPress = function (evt) {
-    if (evt.keyCode === window.util.enterKeycode) {
+    if (evt.keyCode === window.util.escKeycode) {
       closeGalleryOverlay();
     }
   };
