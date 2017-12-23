@@ -88,7 +88,7 @@
   };
 
   var checkHashTagsValidity = function () {
-    var uploadHashTags = uploadHashTagsForm.value.toLowerCase().split(' ');
+    var uploadHashTags = uploadHashTagsForm.value.toLowerCase().trim().split(' ');
     var isValid = true;
 
     if (uploadHashTags.length > NUM_OF_HASHTAGS) {
