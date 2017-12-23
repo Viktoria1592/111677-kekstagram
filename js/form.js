@@ -96,16 +96,13 @@
       isValid = false;
     }
 
-    for (var i = 0; i < uploadHashTags.length; i++) {
-      for (var j = i + 1; j < uploadHashTags.length; j++) {
-        if (uploadHashTags[i] === uploadHashTags[j]) {
+    uploadHashTags.forEach(function (value, index) {
+      for (var i = index + 1; i < uploadHashTags.length; i++) {
+        if (uploadHashTags[index] === uploadHashTags[i]) {
           errorMessage = 'Нельзя использовать один и тот же хэш-тег несколько раз.';
           isValid = false;
         }
       }
-    }
-
-    uploadHashTags.forEach(function (value) {
       if (value.slice(-1) === ',' || value.slice(-1) === ';') {
         errorMessage = 'Разделять хэш-теги нужно одним пробелом.';
         isValid = false;
@@ -122,9 +119,14 @@
 
     var isEmptyHashTags = window.util.checkEmptyElements(uploadHashTags);
 
-    if (isEmptyHashTags === true) {
+    if (isEmptyHashTags) {
       errorMessage = 'Хэш-тег не должен быть пустым.';
       isValid = false;
+    }
+
+    if (uploadHashTagsForm.value === '') {
+      errorMessage = '';
+      isValid = true;
     }
 
     uploadHashTagsForm.setCustomValidity(errorMessage);
@@ -133,7 +135,7 @@
   };
 
   var checkHashTags = function () {
-    if (checkHashTagsValidity() === true) {
+    if (checkHashTagsValidity()) {
       uploadHashTagsForm.style.borderColor = 'rgb(169, 169, 169)';
       return true;
     } else {
@@ -155,11 +157,9 @@
   };
 
   var onUploadPhotoFormClick = function (evt) {
-    if (checkHashTags() === true) {
-      evt.preventDefault();
+    evt.preventDefault();
+    if (checkHashTags()) {
       window.backend.save(new FormData(uploadImageForm), overlayFormToDefaults, window.onError);
-    } else {
-      evt.preventDefault();
     }
   };
 
