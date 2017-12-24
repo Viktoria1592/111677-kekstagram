@@ -7,7 +7,6 @@
 
   var uploadImageForm = document.querySelector('#upload-select-image');
   var uploadInput = uploadImageForm.querySelector('.upload-input');
-  var iconImage = uploadImageForm.querySelector('.upload-file');
   var uploadOverlayForm = uploadImageForm.querySelector('.upload-overlay');
   var uploadOverlayCloseBtn = uploadImageForm.querySelector('.upload-form-cancel');
   var uploadFormDescr = uploadImageForm.querySelector('.upload-form-description');
@@ -16,42 +15,11 @@
   var imagePreview = uploadImageForm.querySelector('.effect-image-preview');
   var uploadEffectLevel = uploadImageForm.querySelector('.upload-effect-level');
 
-  var formData = new FormData(uploadImageForm);
   var isFormDescrBusy = false;
   var reader; // Загрузка FileReader
 
-  document.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-  });
-
-  document.addEventListener('dragenter', function (evt) {
-    if (evt.target === iconImage) {
-      evt.target.style.background = 'url(img/icon-photo-upload.png) no-repeat center';
-      uploadImageForm.style.opacity = '0.9';
-    }
-  });
-
-  document.addEventListener('dragleave', function (evt) {
-    if (evt.target === iconImage) {
-      evt.target.removeAttribute('style');
-      uploadImageForm.removeAttribute('style');
-    }
-  });
-
-  document.addEventListener('drop', function (evt) {
-    evt.preventDefault();
-    if (evt.target === iconImage) {
-      evt.target.removeAttribute('style');
-      uploadImageForm.removeAttribute('style');
-      var droppedFiles = evt.dataTransfer.files[0];
-      formData.append('filename', droppedFiles, droppedFiles.name);
-      uploadImage(droppedFiles);
-    }
-  });
-
   uploadInput.addEventListener('change', function () {
     var imageFile = uploadInput.files[0];
-    formData.append('filename', imageFile, imageFile.name);
     uploadImage(imageFile);
   });
 
@@ -67,7 +35,6 @@
       reader = new FileReader();
       reader.addEventListener('load', function () {
         uploadOverlayForm.classList.remove('hidden');
-        formData.append('filename', imageFile, imageFile.name);
         effectImagePreview.src = reader.result;
       });
 
