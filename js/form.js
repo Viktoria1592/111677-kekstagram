@@ -16,9 +16,9 @@
   var imagePreview = uploadImageForm.querySelector('.effect-image-preview');
   var uploadEffectLevel = uploadImageForm.querySelector('.upload-effect-level');
 
+  var formData = new FormData(uploadImageForm);
   var isFormDescrBusy = false;
   var reader; // Загрузка FileReader
-  var errorMessage = '';
 
   document.addEventListener('dragover', function (evt) {
     evt.preventDefault();
@@ -44,12 +44,14 @@
       evt.target.removeAttribute('style');
       uploadImageForm.removeAttribute('style');
       var droppedFiles = evt.dataTransfer.files[0];
+      formData.append('filename', droppedFiles, droppedFiles.name);
       uploadImage(droppedFiles);
     }
   });
 
   uploadInput.addEventListener('change', function () {
     var imageFile = uploadInput.files[0];
+    formData.append('filename', imageFile, imageFile.name);
     uploadImage(imageFile);
   });
 
@@ -65,6 +67,7 @@
       reader = new FileReader();
       reader.addEventListener('load', function () {
         uploadOverlayForm.classList.remove('hidden');
+        formData.append('filename', imageFile, imageFile.name);
         effectImagePreview.src = reader.result;
       });
 
@@ -90,6 +93,7 @@
   var checkHashTagsValidity = function () {
     var uploadHashTags = uploadHashTagsForm.value.toLowerCase().trim().split(' ');
     var isValid = true;
+    var errorMessage = '';
 
     if (uploadHashTags.length > NUM_OF_HASHTAGS) {
       errorMessage = 'Можно использовать только ' + NUM_OF_HASHTAGS + ' хэш-тегов.';
@@ -111,6 +115,10 @@
         errorMessage = 'Хэш-тег должен начинаться с #';
         isValid = false;
       }
+      if ((value.charAt(0) === '#') && (value.length === 1)) {
+        errorMessage = 'После # напишите название хэш-тега';
+        isValid = false;
+      }
       if (value.length > LENGTH_OF_HASHTAGS) {
         errorMessage = 'Максимальная длинна хэш-тега должна быть ' + LENGTH_OF_HASHTAGS + ' символов.';
         isValid = false;
@@ -130,7 +138,6 @@
     }
 
     uploadHashTagsForm.setCustomValidity(errorMessage);
-    errorMessage = '';
     return isValid;
   };
 
