@@ -10,7 +10,7 @@
   var fillPhotoData = function (element, selector, photoArr) {
     element.querySelector(selector.image).src = photoArr.url;
     element.querySelector(selector.likes).textContent = photoArr.likes;
-    element.querySelector(selector.comments).textContent = photoArr.comments;
+    element.querySelector(selector.comments).textContent = photoArr.comments.length;
 
     return element;
   };

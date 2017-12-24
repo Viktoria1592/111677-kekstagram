@@ -1,14 +1,14 @@
 'use strict';
 
 (function () {
-  var effectLevelLine = document.querySelector('.upload-effect-level-line');
-  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
-  var effectLevelVal = document.querySelector('.upload-effect-level-val');
-  var levelValue = document.querySelector('.upload-effect-level-value');
-  var uploadEffectControl = document.querySelector('.upload-effect-controls');
-  var uploadEffectLevel = document.querySelector('.upload-effect-level');
-  var resizeValueField = document.querySelector('.upload-resize-controls-value');
-  var imagePreview = document.querySelector('.effect-image-preview');
+  var uploadImageForm = document.querySelector('#upload-select-image');
+  var imagePreview = uploadImageForm.querySelector('.effect-image-preview');
+  var uploadEffectControl = uploadImageForm.querySelector('.upload-effect-controls');
+  var effectLevelLine = uploadImageForm.querySelector('.upload-effect-level-line');
+  var effectLevelPin = uploadImageForm.querySelector('.upload-effect-level-pin');
+  var effectLevelVal = uploadImageForm.querySelector('.upload-effect-level-val');
+  var levelValue = uploadImageForm.querySelector('.upload-effect-level-value');
+  var uploadEffectLevel = uploadImageForm.querySelector('.upload-effect-level');
 
   var shiftX; // Смещение пина по оси Х
   var lineCoords; // Кординаты области фильтра
@@ -81,8 +81,7 @@
 
     effectLevelPin.style.left = '100%';
     effectLevelVal.style.width = '100%';
-    resizeValueField.value = '100%';
-    imagePreview.removeAttribute('style');
+    imagePreview.style.filter = '';
 
     effectLevelPin.addEventListener('mousedown', function (evt) {
       pinCoords = getCoords(effectLevelPin);
