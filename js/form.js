@@ -74,6 +74,12 @@
           isValid = false;
         }
       }
+      for (i = 0; i < value.length; i++) {
+        if (value.charAt(i + 1) === '#') {
+          errorMessage = 'Разделять хэш-теги нужно одним пробелом.';
+          isValid = false;
+        }
+      }
       if (value.slice(-1) === ',' || value.slice(-1) === ';') {
         errorMessage = 'Разделять хэш-теги нужно одним пробелом.';
         isValid = false;
